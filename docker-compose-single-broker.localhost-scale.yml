@@ -1,72 +1,87 @@
-version: "2"
-services:
-  zookeeper:
-    image: wurstmeister/zookeeper
-    ports:
-      - "2181:2181"
-    # kafka:
-    #   build: .
-    #   ports:
-    #     # - "9092:9092"
-    #     - 9092
-    #   environment:
-    #     KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1 #192.168.99.100
-    #     KAFKA_CREATE_TOPICS: "test:1:1"
-    #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-    #       # KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
-    #       # KAFKA_ADVERTISED_HOST_NAME: xx.xx.xx.xx
-    #       # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-    #       # KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 1600000
-    #       # #KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
-    #       # KAFKA_LOG_RETENTION_HOURS: 0
-    #       # KAFKA_LOG_RETENTION_MINUTES: 0
-    #       # KAFKA_LOG_RETENTION_MS: 120000
-    #       # RETENTION.MS: 900000
-    #       # ADVERTISED_HOST: kafkaserver
-    #       # ADVERTISED_PORT: 9092
-    #       # KAFKA_SEGMENT_BYTES: 1073741824
-    #       # KAFKA_RETENTION_CHECK_INTERVAL_MS: 300000
-    #       # KAFKA_CREATE_TOPICS: topic1:1:1,topic2:1:1,topic3:1:1,topic4:1:1,topic5:1:1,topic6:1:1
-  # https://github.com/wurstmeister/kafka-docker/issues/169#issuecomment-448550682
-  kafka1:
-    image: wurstmeister/kafka
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://:9092
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://127.0.0.1:9092
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-    depends_on:
-      - zookeeper
-  kafka2:
-    image: wurstmeister/kafka
-    ports:
-      - "9096:9096"
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://:9096
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://127.0.0.1:9096
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-    depends_on:
-      - zookeeper
-  kafka3:
-    image: wurstmeister/kafka
-    ports:
-      - "9010:9010"
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://:9010
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://127.0.0.1:9010
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-    depends_on:
-      - zookeeper
-
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+# NOTE: Couldn't get kafka to work using this setup
+#  version: "2"
+# services:
+#   zookeeper:
+#     image: wurstmeister/zookeeper
+#     ports:
+#       - "2181:2181"
+#   # kafka:
+#   #   build: .
+#   #   ports:
+#   #     # - "9092:9092"
+#   #     - 9092
+#   #   environment:
+#   #           KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1 #192.168.99.100
+#   #     KAFKA_CREATE_TOPICS: "test:1:1"
+#   #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#   #     # KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
+#   #     #       KAFKA_ADVERTISED_HOST_NAME: xx.xx.xx.xx
+#   #     # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+#   #     # KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 1600000
+#   #     # #KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
+#   #     # KAFKA_LOG_RETENTION_HOURS: 0
+#   #     # KAFKA_LOG_RETENTION_MINUTES: 0
+#   #     # KAFKA_LOG_RETENTION_MS: 120000
+#   #     # RETENTION.MS: 900000
+#   #     # ADVERTISED_HOST: kafkaserver
+#   #     # ADVERTISED_PORT: 9092
+#   #     # KAFKA_SEGMENT_BYTES: 1073741824
+#   #     # KAFKA_RETENTION_CHECK_INTERVAL_MS: 300000
+#   #     # KAFKA_CREATE_TOPICS: topic1:1:1,topic2:1:1,topic3:1:1,topic4:1:1,topic5:1:1,topic6:1:1
+#   #   volumes:
+#   #     - /var/run/docker.sock:/var/run/docker.sock
+#   # https://github.com/wurstmeister/kafka-docker/issues/169#issuecomment-448550682
+#   kafka1:
+#     # image: wurstmeister/kafka
+#     build: .
+#     ports:
+#       # - "9092:9092"
+#       - 9094:9094
+#     environment:
+#       HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+#       KAFKA_ADVERTISED_HOST_NAME: _{HOSTNAME_COMMAND}
+#       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+#       KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
+#       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+#       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+#     depends_on:
+#       - zookeeper
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock
+#   kafka2:
+#     # image: wurstmeister/kafka
+#     build: .
+#     ports:
+#       - "9096:9096"
+#       # - 9096
+#     environment:
+#       HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+#       KAFKA_ADVERTISED_HOST_NAME: _{HOSTNAME_COMMAND}
+#       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+#       KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9096
+#       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9096
+#       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+#     depends_on:
+#       - zookeeper
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock
+#   kafka3:
+#     # image: wurstmeister/kafka
+#     build: .
+#     ports:
+#       - "9010:9010"
+#       # - 9010
+#     environment:
+#       HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+#       KAFKA_ADVERTISED_HOST_NAME: _{HOSTNAME_COMMAND}
+#       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+#       KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9010
+#       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9010
+#       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+#     depends_on:
+#       - zookeeper
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock
