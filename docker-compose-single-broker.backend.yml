@@ -5,7 +5,8 @@ services:
     ports:
       - "2181:2181"
   kafka:
-    build: .
+    # build: .
+    image: wurstmeister/kafka:2.12-2.2.0
     ports:
       # - "9092:9092"
       # - 9092-9100:9092

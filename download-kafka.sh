@@ -19,6 +19,8 @@ if [[ -z "$url" ]]; then
     exit 1
 fi
 
+$url = "http://apache.osuosl.org/kafka/2.1.1/kafka_2.12-2.1.1.tgz"
+# $url = "http://apache.osuosl.org/kafka/2.2.0/kafka_2.12-2.2.0.tgz"
+
 echo "Downloading Kafka from $url"
-# wget "${url}" -O "/tmp/${FILENAME}"
-wget "http://apache.osuosl.org/kafka/2.2.0/kafka_2.12-2.2.0.tgz" -O "/tmp/${FILENAME}"
+wget "${url}" -O "/tmp/${FILENAME}"
